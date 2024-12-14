@@ -1,8 +1,8 @@
 import mysql.connector
 
-
 con = mysql.connector.connect(
     host="localhost", user="root", password="Arpit@123", database="employeeManagement")
+
 
 def check_employee(employee_id):
     # Query to select all rows from the employees table where id matches
@@ -26,38 +26,38 @@ def check_employee(employee_id):
 
 
 def add_employee():
-    Id = input("Enter Employee Id: ")
+    # Id = input("Enter Employee Id: ")
+    #
+    # # Checking if Employee with given Id already exists
+    # if check_employee(Id):
+    #     print("Employee already exists. Please try again.")
+    #     return
+    #
+    # else:
+    Name = input("Enter Employee Name: ")
+    Post = input("Enter Employee Post: ")
+    Salary = input("Enter Employee Salary: ")
 
-    # Checking if Employee with given Id already exists
-    if check_employee(Id):
-        print("Employee already exists. Please try again.")
-        return
+    # Inserting Employee details into the employees table
+    sql = 'INSERT INTO employees (name, post, salary) VALUES (%s, %s, %s)'
+    data = (Name, Post, Salary)
+    cursor = con.cursor()
 
-    else:
-        Name = input("Enter Employee Name: ")
-        Post = input("Enter Employee Post: ")
-        Salary = input("Enter Employee Salary: ")
+    try:
+        # Executing the SQL Query
+        cursor.execute(sql, data)
 
-        # Inserting Employee details into the employees table
-        sql = 'INSERT INTO employees (name, position, salary) VALUES (%s, %s, %s)'
-        data = (Name, Post, Salary)
-        cursor = con.cursor()
+        # Committing the transaction
+        con.commit()
+        print("Employee Added Successfully")
 
-        try:
-            # Executing the SQL Query
-            cursor.execute(sql, data)
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        con.rollback()
 
-            # Committing the transaction
-            con.commit()
-            print("Employee Added Successfully")
-
-        except mysql.connector.Error as err:
-            print(f"Error: {err}")
-            con.rollback()
-
-        finally:
-            # Closing the cursor
-            cursor.close()
+    finally:
+        # Closing the cursor
+        cursor.close()
 
 
 def remove_employee():
@@ -134,6 +134,7 @@ def promote_employee():
             # Closing the cursor
             cursor.close()
 
+
 def display_employees():
     try:
         # Query to select all rows from the employees table
@@ -186,3 +187,7 @@ def menu():
             break
         else:
             print("Invalid Choice! Please try again.")
+
+
+if __name__ == "__main__":
+    menu()
