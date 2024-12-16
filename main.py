@@ -146,6 +146,7 @@ def display_employees():
 
         # Fetching all details of all the Employees
         employees = cursor.fetchall()
+        # print('Employee ID | Employee Name | Employee Post | Employee Salary')
         for employee in employees:
             print("Employee Id : ", employee[0])
             print("Employee Name : ", employee[1])
@@ -160,6 +161,22 @@ def display_employees():
         # Closing the cursor
         cursor.close()
 
+def update_employee():
+    Id = input("Enter Employee's Id: ")
+
+    # Checking if Employee with given Id exists
+    if not check_employee(Id):
+        print("Employee does not exist. Please try again.")
+        return
+
+    else:
+        Name = input("Enter Employee Name: ")
+        Post = input("Enter Employee Post: ")
+        Salary = input("Enter Employee Salary: ")
+
+        sql_select = 'SELECT salary FROM employees WHERE id=%s'
+        data = (Id,)
+        cursor = con.cursor()
 
 def menu():
     while True:
