@@ -211,6 +211,8 @@ def update_employees():
         cursor = con.cursor()
         cursor.execute(sql_update)
 
+        cursor.close()
+
 
 def menu():
     while True:
