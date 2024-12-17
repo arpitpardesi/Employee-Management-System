@@ -161,22 +161,56 @@ def display_employees():
         # Closing the cursor
         cursor.close()
 
-def update_employee():
-    Id = input("Enter Employee's Id: ")
 
+def update_employees():
+    Id = input("Enter Employee's Id: ")
     # Checking if Employee with given Id exists
     if not check_employee(Id):
         print("Employee does not exist. Please try again.")
         return
 
     else:
-        Name = input("Enter Employee Name: ")
-        Post = input("Enter Employee Post: ")
-        Salary = input("Enter Employee Salary: ")
 
-        sql_select = 'SELECT salary FROM employees WHERE id=%s'
-        data = (Id,)
+        sql = f'SELECT * FROM employees where id={Id}'
         cursor = con.cursor()
+
+        # Executing the SQL Query
+        cursor.execute(sql)
+        employee = cursor.fetchone()
+        # Fetching all details of all the Employees
+
+        name = employee[1]
+        post = employee[2]
+        salary = employee[3]
+
+        # print('Employee ID | Employee Name | Employee Post | Employee Salary')
+        print("Employee Name : ", name)
+        print("Employee Post : ", post)
+        print("Employee Salary : ", salary)
+        print("------------------------------------")
+
+        while True:
+            print("\n")
+            print("Press:")
+            print("1 to Update Name")
+            print("2 to Update Post")
+            print("3 to Update Salary")
+            print('0 to exit')
+            ch = input("Enter your Choice: ")
+
+            if ch == '1':
+                name = input("Enter Employee Name: ")
+            elif ch == '2':
+                post = input("Enter Employee Post: ")
+            elif ch == '3':
+                salary = input("Enter Employee Salary: ")
+            else:
+                break
+
+        sql_update = f'UPDATE employees SET name = "{name}", post= "{post}", salary ="{salary}" WHERE id={Id}'
+        cursor = con.cursor()
+        cursor.execute(sql_update)
+
 
 def menu():
     while True:
@@ -186,7 +220,8 @@ def menu():
         print("2 to Remove Employee")
         print("3 to Promote Employee")
         print("4 to Display Employees")
-        print("5 to Exit")
+        print("5 to Update Employees")
+        print("6 to Exit")
 
         # Taking choice from user
         ch = input("Enter your Choice: ")
@@ -200,6 +235,8 @@ def menu():
         elif ch == '4':
             display_employees()
         elif ch == '5':
+            update_employees()
+        elif ch == '6':
             print("Exiting the program. Goodbye!")
             break
         else:
